@@ -11,6 +11,7 @@ local DefaultGoToDefinitionKeyMap = "<leader>dx"
 BetterTsErrors.options = {
     -- Prints useful logs about what event are triggered, and reasons actions are executed.
     debug = false,
+    default_mappings = true,
     keymaps = {
         toggle = DefaultToggleKeyMap,
         go_to_definition = DefaultGoToDefinitionKeyMap,
@@ -28,14 +29,16 @@ function BetterTsErrors.setup(options)
 
     BetterTsErrors.options = vim.tbl_deep_extend("keep", options, BetterTsErrors.options)
 
-    local keymap = BetterTsErrors.options.keymaps or
-        { toggle = DefaultToggleKeyMap, go_to_definition = DefaultGoToDefinitionKeyMap }
+    if BetterTsErrors.options.default_mappings then
+      local keymap = BetterTsErrors.options.keymaps or
+          { toggle = DefaultToggleKeyMap, go_to_definition = DefaultGoToDefinitionKeyMap }
 
-    vim.api.nvim_set_keymap('n', keymap.toggle, '<cmd>lua BetterTsErrors.toggle()<CR>',
-        { noremap = true, silent = true, desc = 'Show Better TS Error' })
+      vim.api.nvim_set_keymap('n', keymap.toggle, '<cmd>lua BetterTsErrors.toggle()<CR>',
+          { noremap = true, silent = true, desc = 'Show Better TS Error' })
 
-    vim.api.nvim_set_keymap('n', keymap.go_to_definition, '<cmd>lua BetterTsErrors.goToDefinition()<CR>',
-        { noremap = true, silent = true, desc = 'Go to Error Definition' })
+      vim.api.nvim_set_keymap('n', keymap.go_to_definition, '<cmd>lua BetterTsErrors.goToDefinition()<CR>',
+          { noremap = true, silent = true, desc = 'Go to Error Definition' })
+    end
 
     return BetterTsErrors.options
 end
